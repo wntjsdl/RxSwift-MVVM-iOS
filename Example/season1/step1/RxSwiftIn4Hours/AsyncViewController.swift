@@ -36,6 +36,14 @@ class AsyncViewController: UIViewController {
 
     @IBAction func onLoadAsync(_ sender: Any) {
         // TODO: async
+        DispatchQueue.global().async {
+            guard let url = URL(string: self.IMAGE_URL) else { return }
+            guard let data = try? Data(contentsOf: url) else { return }
+            let image = UIImage(data: data)
+            DispatchQueue.main.async {
+                self.imageView.image = image
+            }
+        }
     }
 
     private func loadImage(from imageUrl: String) -> UIImage? {

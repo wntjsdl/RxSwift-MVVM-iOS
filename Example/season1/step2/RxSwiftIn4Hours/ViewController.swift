@@ -72,6 +72,7 @@ class ViewController: UITableViewController {
 
     @IBAction func exMap3() {
         Observable.just("800x600")
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .default))
             .map { $0.replacingOccurrences(of: "x", with: "/") }
             .map { "https://picsum.photos/\($0)/?random" }
             .map { URL(string: $0) }
@@ -79,6 +80,7 @@ class ViewController: UITableViewController {
             .map { $0! }
             .map { try Data(contentsOf: $0) }
             .map { UIImage(data: $0) }
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { image in
                 self.imageView.image = image
             })
